@@ -11,9 +11,7 @@
 - 📱 Responsive design
 - 🎨 Follows system appearance (Light/Dark mode)
 
----
-
-### 🚀 Installation via Swift Package Manager
+## 🚀 Installation
 
 To integrate this package into your project, use the following repository URL:
 
@@ -24,8 +22,6 @@ https://github.com/Momentumos/MDatePicker
 1. Open your project in Xcode.
 2. Navigate to **File > Add Packages**.
 3. Enter the URL above and follow the prompts to add the package to your project.
-
----
 
 ## 💡 Usage
 
