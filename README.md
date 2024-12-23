@@ -1,6 +1,7 @@
 # 📅 MDatePicker
 
-> The missing native date picker for macOS
+> The missing custom SiwftUI date picker for macOS
+![MDatePicker](Resources/Calendar.png)
 
 ## ✨ Features
 
@@ -8,27 +9,32 @@
 - 🖥️ Clean and minimal UI
 - 📱 Responsive design
 - 🎨 Follows system appearance (Light/Dark mode)
-- ⌨️ Keyboard navigation support
 
 ## 🚀 Installation
 
-1. Clone the repository
+1. Use Swift Package Manager with following url
 ```bash
-git clone https://github.com/Momentumos/MDatePicker.git
+https://github.com/Momentumos/MDatePicker
 ```
 ## 💡 Usage
 
 Import MDatePicker into your macOS project and use it like this:
 
 ```swift
-let datePicker = MDatePicker()
-datePicker.show()
+//Define a state variable to hold the picked date
+//For picking single dates
+@State var pickedSingleDate = MPickedDate.single(.now)
+
+//For picking a date range
+@State var dateValue: MPickedDate? = .range(Calendar.current.date(byAdding: .day, value: -2, to: .now) ?? .now, Calendar.current.date(byAdding: .day, value: 2, to: .now) ?? .now)
+
+//Use in any view
+MDatePicker(pickedDate: $dateValue)
 ```
 
 ## 🛠️ Requirements
-- macOS 10.15+
-- Xcode 12.0+
-- Swift 5.0+
+- macOS 14.0
+- iOS 13.0
 
 ## 🤝 Contributing
 Contributions are welcome! Feel free to:
