@@ -50,14 +50,5 @@ Contributions are welcome! Feel free to:
 2. Create your feature branch
 3. Submit a pull request
 
-
-## 📝 License
-This project is available under the MIT license. See the LICENSE file for more info.
-
 ## ⭐ Show Your Support
 Give a ⭐️ if this project helped you!
-
-## 📫 Contact
-Created by @Momentumos
-
-This README template provides a professional and engaging presentation of the MDatePicker project with clear sections, emojis for visual appeal, and all essential information a developer would need. Feel free to customize the content further based on specific features and requirements of your implementation!
