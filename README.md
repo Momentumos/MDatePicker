@@ -1,6 +1,6 @@
 # 📅 MDatePicker
 
-> The missing custom SiwftUI date picker for macOS
+> The missing SiwftUI date picker for macOS
 
 ![MDatePicker](Resources/Calendar.png)
 
