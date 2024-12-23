@@ -38,6 +38,8 @@ public struct MDatePicker: View {
                     Text(getMonthString(of: currentMonth))
                         .font(.system(size: 16).weight(.medium))
                         .foregroundStyle(Colors.content.main)
+                        .contentTransition(.identity)
+                    
                     if !Calendar.current.isDate(currentMonth, equalTo: Date(), toGranularity: .month) {
                         Button {
                             currentMonth = Date()
@@ -64,10 +66,10 @@ public struct MDatePicker: View {
                         }
                     } label: {
                         Image(systemName: "chevron.left")
-                               .resizable()
-                               .scaledToFit()
-                               .padding(4)
-                               .frame(width: 24, height: 24)
+                            .resizable()
+                            .scaledToFit()
+                            .padding(4)
+                            .frame(width: 24, height: 24)
                     }
                     .buttonStyle(.borderless)
                     .tint(Colors.content.main)
@@ -78,14 +80,14 @@ public struct MDatePicker: View {
                         }
                     } label: {
                         Image(systemName: "chevron.right")
-                               .resizable()
-                               .scaledToFit()
-                               .padding(4)
-                               .frame(width: 24, height: 24)
+                            .resizable()
+                            .scaledToFit()
+                            .padding(4)
+                            .frame(width: 24, height: 24)
                     }
                     .buttonStyle(.borderless)
                     .tint(Colors.content.main)
-
+                    
                 }
             }
             .frame(height: 48)
@@ -134,12 +136,13 @@ public struct MDatePicker: View {
                                         .background(getBackground(for: days[w * Self.daysInAWeek + d]))
                                 }
                                 .buttonStyle(.borderless)
+                                
                             }
                         }
                     }
                 }
             }
-
+            
         }
         .padding(32)
         .frame(width: 400, height: 400)
@@ -156,10 +159,6 @@ public struct MDatePicker: View {
         }
         .onChange(of: currentMonth) { _, _ in
             days = Self.getCalendarDays(of: currentMonth)
-        }
-        .onChange(of: isRangeMode) { _, _ in
-            tmpDateSelection = nil
-            pickedDate = nil
         }
         .onChange(of: tmpStartTimeSelection) { _, startTime in
             guard let pickedDate else {
@@ -197,7 +196,7 @@ public struct MDatePicker: View {
     }
     
     
-
+    
     
     private func getMonthString(of month: Date) -> String {
         let formatter = DateFormatter()
@@ -213,59 +212,86 @@ public struct MDatePicker: View {
             return ""
         }
     }
+    
     @ViewBuilder
     func getBackground(for day: Date) -> some View {
         let calendar = Calendar.current
         
-        if calendar.isDate(day, inSameDayAs: Date()) {
-            Circle()
-                .stroke(Colors.border.main, lineWidth: 1)
-        } else {
-            switch pickedDate {
-            case let .single(date):
-                if calendar.isDate(day, inSameDayAs: date) {
+        switch pickedDate {
+        case let .single(date):
+            if calendar.isDate(day, inSameDayAs: date) {
+                Circle().fill(Colors.accent.info)
+            }else if calendar.isDate(day, inSameDayAs: Date()) {
+                Circle()
+                    .stroke(Colors.border.main, lineWidth: 1)
+            }else {
+                Rectangle().fill(.clear)
+            }
+            
+        case let .range(start, end):
+            if let tmpDateSelection {
+                if calendar.isDate(day, inSameDayAs: tmpDateSelection) {
                     Circle().fill(Colors.accent.info)
-                } else {
+                        .stroke(calendar.isDate(day, inSameDayAs: Date()) ? Colors.border.main : .clear, lineWidth: 1)
+                }else if calendar.isDate(day, inSameDayAs: Date()) {
+                    Circle()
+                        .stroke(Colors.border.main, lineWidth: 1)
+                }else {
                     Rectangle().fill(.clear)
                 }
-                
-            case let .range(start, end):
-                if let tmpDateSelection {
-                    if calendar.isDate(day, inSameDayAs: tmpDateSelection) {
-                        Circle().fill(Colors.accent.info)
-                            .stroke(calendar.isDate(day, inSameDayAs: Date()) ? Colors.border.main : .clear, lineWidth: 1)
-                    } else {
-                        Rectangle().fill(.clear)
-                    }
-                } else {
-                    if calendar.isDate(day, inSameDayAs: start) || calendar.isDate(day, inSameDayAs: end) {
-                        Circle().fill(Colors.accent.info)
-                    } else if start ... end ~= day {
-                        Rectangle().fill(Colors.background.info)
-                    } else {
-                        Rectangle().fill(.clear)
-                    }
-                }
-                
-            case nil:
-                if let tmpDateSelection {
-                    if calendar.isDate(day, inSameDayAs: tmpDateSelection) {
-                        Circle().fill(Colors.accent.info)
-                    } else {
-                        Rectangle().fill(.clear)
-                    }
+            } else {
+                if calendar.isDate(day, inSameDayAs: start){
+                    Circle().fill(Colors.accent.info)
+                        .background {
+                            HStack {
+                                Spacer(minLength: 0)
+                                Rectangle()
+                                    .fill(Colors.background.info)
+                                    .frame(width: 24)
+                            }
+                        }
+                }else if calendar.isDate(day, inSameDayAs: end) {
+                    Circle().fill(Colors.accent.info)
+                        .background {
+                            HStack {
+                                Rectangle()
+                                    .fill(Colors.background.info)
+                                    .frame(width: 24)
+                                Spacer(minLength: 0)
+                            }
+                        }
+                }else if calendar.isDate(day, inSameDayAs: Date()) {
+                    Circle()
+                        .stroke(Colors.border.main, lineWidth: 1)
+                        .background{
+                            Rectangle()
+                                .fill(start ... end ~= day  ? Colors.background.info : .clear)
+                        }
+                }else if start ... end ~= day {
+                    
+                        Rectangle()
+                            .fill(Colors.background.info)
+                   
                 } else {
                     Rectangle().fill(.clear)
                 }
             }
+            
+        case nil:
+            if let tmpDateSelection {
+                if calendar.isDate(day, inSameDayAs: tmpDateSelection) {
+                    Circle().fill(Colors.accent.info)
+                } else {
+                    Rectangle().fill(.clear)
+                }
+            } else {
+                Rectangle().fill(.clear)
+            }
         }
     }
-
+    
     private func getDayColor(of date: Date) -> Color {
         let calendar = Calendar.current
-        if calendar.isDate(date, inSameDayAs: Date()) {
-            return Colors.content.main
-        }
         
         switch pickedDate {
         case let .single(selectedDate):
@@ -289,9 +315,9 @@ public struct MDatePicker: View {
         // Default color for all other days, including the current day
         return calendar.isDate(date, equalTo: currentMonth, toGranularity: .month) ? Colors.content.main : Colors.content.inactive
     }
-
-
-
+    
+    
+    
     private func updateStates(with dateValue: MPickedDate?) {
         guard let dateValue else {
             currentMonth = Date()
@@ -299,18 +325,12 @@ public struct MDatePicker: View {
         }
         switch dateValue {
         case let .single(date):
-            if !Calendar.current.isDate(date, equalTo: currentMonth, toGranularity: .month) {
-                currentMonth = date
-            }
             if isRangeMode {
                 isRangeMode = false
             }
             tmpDateSelection = nil
             tmpStartTimeSelection = date
         case let .range(start, end):
-            if !Calendar.current.isDate(end, equalTo: currentMonth, toGranularity: .month) {
-                currentMonth = end
-            }
             if !isRangeMode {
                 isRangeMode = true
             }
@@ -347,8 +367,8 @@ public struct MDatePicker: View {
 
 
 #Preview {
-    @Previewable @State var dateValue: MPickedDate? = .single(.now)
-//    @Previewable @State var dateValue: MPickedDate? = .range(.now, .now.addingTimeInterval(9000))
+    //    @Previewable @State var dateValue: MPickedDate? = .single(.now.)
+    @Previewable @State var dateValue: MPickedDate? = .range(Calendar.current.date(byAdding: .day, value: -2, to: .now)!, Calendar.current.date(byAdding: .day, value: 2, to: .now)!)
     
     MDatePicker(pickedDate: $dateValue)
         .frame(height: 400)
