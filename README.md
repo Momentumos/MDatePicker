@@ -30,7 +30,7 @@ Import MDatePicker into your macOS project and use it like this:
 ```swift
 //Define a state variable to hold the picked date
 //For picking single dates
-@State var pickedSingleDate = MPickedDate.single(.now)
+@State var pickedSingleDate: MPickedDate? = .single(.now)
 
 //For picking a date range
 @State var dateValue: MPickedDate? = .range(Calendar.current.date(byAdding: .day, value: -2, to: .now) ?? .now, Calendar.current.date(byAdding: .day, value: 2, to: .now) ?? .now)
