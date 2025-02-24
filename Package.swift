@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "MDatePicker",
     platforms: [
-           .iOS(.v13),
+        .iOS(.v17),
            .macOS(.v14)
        ],
     products: [

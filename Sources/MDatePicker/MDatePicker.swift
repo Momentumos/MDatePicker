@@ -365,14 +365,3 @@ public struct MDatePicker: View {
     }
 }
 
-
-#Preview {
-    //    @Previewable @State var dateValue: MPickedDate? = .single(.now.)
-    @Previewable @State var dateValue: MPickedDate? = .range(Calendar.current.date(byAdding: .day, value: -2, to: .now)!, Calendar.current.date(byAdding: .day, value: 2, to: .now)!)
-    
-    MDatePicker(pickedDate: $dateValue)
-        .frame(height: 400)
-        .padding()
-        .background(.gray)
-    
-}
