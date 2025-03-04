@@ -32,7 +32,6 @@ public struct MDatePicker: View {
     public var body: some View {
         VStack(spacing: 0) {
             
-            
             ZStack {
                 HStack {
                     Text(getMonthString(of: currentMonth))
@@ -146,10 +145,12 @@ public struct MDatePicker: View {
         }
         .padding(32)
         .frame(width: 400, height: 400)
+        #if os(macOS)
         .background {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Colors.background.main)
         }
+        #endif
         .onAppear {
             updateStates(with: pickedDate)
             days = Self.getCalendarDays(of: currentMonth)
