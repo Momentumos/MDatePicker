@@ -143,9 +143,10 @@ public struct MDatePicker: View {
             }
             
         }
+
+        #if os(macOS)
         .padding(32)
         .frame(width: 400, height: 400)
-        #if os(macOS)
         .background {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Colors.background.main)
