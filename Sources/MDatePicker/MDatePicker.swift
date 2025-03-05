@@ -280,7 +280,10 @@ public struct MDatePicker: View {
             }
             
         case nil:
-            if let tmpDateSelection {
+            if calendar.isDate(day, inSameDayAs: Date()) {
+                Circle()
+                    .stroke(Colors.border.main, lineWidth: 1)
+            }else if let tmpDateSelection {
                 if calendar.isDate(day, inSameDayAs: tmpDateSelection) {
                     Circle().fill(Colors.accent.info)
                 } else {
